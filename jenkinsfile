@@ -1,0 +1,41 @@
+pipeline {
+    agent any
+    environment {
+        class_name = "velocity"
+    }
+
+    stages {
+        stage ('printing variables') {
+            input {
+                message "should i continue or abort here"
+                ok "yes we can"
+            }
+            steps {
+                sh '''
+                echo "${BUILD_ID}"
+                echo "This is user defined global variable ${class_name}"
+                '''
+            }
+            }
+         stage ('stage level variables') {
+             environment {
+                 place_name = 'velocity'
+             }
+            steps {
+                sh '''
+                echo "This is user defined global variable ${class_name}"
+                echo "This is user defined stage level variable ${place_name}"
+                '''
+            } 
+         }
+        }
+       post { 
+        always { 
+            echo 'I will always say Hello again!' 
+            
+        }
+        success {
+            echo 'pipeline is successful'
+        }
+    }
+}
